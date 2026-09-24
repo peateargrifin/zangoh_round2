@@ -1,0 +1,389 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Zangoh API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/templates": {
+      "get": {
+        "summary": "List response templates",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "parameters": [
+          {
+            "name": "shared",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a template ({{variables}} are detected from content)",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "Return Process",
+                  "category": "returns",
+                  "content": "To return your {{product_name}}...",
+                  "isShared": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/templates/{id}": {
+      "get": {
+        "summary": "Get a template",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update a template",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "New name",
+                  "content": "Hi {{customer_name}}"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a template",
+        "tags": [
+          "Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/presets": {
+      "get": {
+        "summary": "List agent configuration presets",
+        "tags": [
+          "Presets"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "summary": "Save an agent configuration preset",
+        "tags": [
+          "Presets"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "name": "Precise",
+                  "parameters": {
+                    "temperature": 0.2
+                  },
+                  "escalationThresholds": {
+                    "lowConfidence": 0.6
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/presets/{id}": {
+      "delete": {
+        "summary": "Delete a preset",
+        "tags": [
+          "Presets"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/conversations/{id}/feedback": {
+      "post": {
+        "summary": "Record supervisor feedback on the AI agent",
+        "tags": [
+          "Conversations"
+        ],
+        "responses": {
+          "201": {
+            "description": "Recorded"
+          },
+          "400": {
+            "description": "Invalid rating"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "rating": 4,
+                  "category": "tone",
+                  "comment": "Good empathy"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/analytics/overview": {
+      "get": {
+        "summary": "Dashboard aggregates and trends",
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "parameters": [
+          {
+            "name": "timeRange",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "today",
+                "week",
+                "month",
+                "year"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/api/ai/status": {
+      "get": {
+        "summary": "Active LLM provider (gemini or mock)",
+        "tags": [
+          "AI"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ai/reply": {
+      "post": {
+        "summary": "AI agent replies now, using its saved config",
+        "tags": [
+          "AI"
+        ],
+        "responses": {
+          "201": {
+            "description": "Reply stored"
+          },
+          "409": {
+            "description": "Human in control / resolved"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "conversationId": "conv-2023-10"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ai/sentiment": {
+      "post": {
+        "summary": "Sentiment 0..1 of a text",
+        "tags": [
+          "AI"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "text": "This is terrible"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ai/test-reply": {
+      "post": {
+        "summary": "Try an agent's config on a message",
+        "tags": [
+          "AI"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "agentId": "agent-cs-1",
+                  "message": "Where is my order?"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
