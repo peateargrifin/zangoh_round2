@@ -10,7 +10,7 @@ when the AI is not enough, hand it back with guidance, tune the agents, and reus
 
 ## Demo video
 
-**2-minute walkthrough:** `<paste video link here>`
+**2-minute walkthrough:** [Watch on Google Drive](https://drive.google.com/file/d/1NvwJloSRQvTAlpNiDgNoQeYKe0nuCW_M/view?usp=sharing)
 
 ## Contents
 
